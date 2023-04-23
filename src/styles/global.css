@@ -1,0 +1,14 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+input {
+    outline-style: none;
+    background-color: unset;
+    border-color: unset;
+    color: unset;
+    border-image: unset;
+    border-width: unset;
+    border-style: unset;
+}

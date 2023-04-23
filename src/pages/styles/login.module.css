@@ -1,0 +1,44 @@
+.loginPage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+    background-color: #0a194a;
+    color: #ffffffe1;
+    font-weight: 700;
+}
+
+.loginCard {
+    width: 300px;
+    /* height: 300px; */
+    border-radius: 10px;
+}
+
+.title {
+    font-size: 30px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.detail {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.input {
+    border-bottom: 2px solid #ffffffe1;
+}
+
+.submit {
+    margin-left: auto;
+    width: 60px;
+    cursor: pointer;
+}
