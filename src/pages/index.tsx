@@ -1,13 +1,12 @@
-import { useRouter } from 'next/router'
-import { useEffect, useLayoutEffect } from 'react'
+import Link from 'next/link'
+import { useEffect } from 'react'
 export default function Index() {
-    const router = useRouter()
     useEffect(() => {
-        if(true) router.push('/login')
+        // if(true) router.push('/login')
     }, [])
     return (
         <div>
-            {false && (<div>none</div>)}
+            <Link href="/editor">a</Link>
         </div>
     )
 }
