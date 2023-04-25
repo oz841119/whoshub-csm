@@ -1,0 +1,21 @@
+.tools {
+    display: flex;
+    gap: 4px;
+    height: 30px;
+    background-color: #000;
+}
+
+.toolItem {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 30px;
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.toolItem:hover {
+    transform: scale(1.1);
+}

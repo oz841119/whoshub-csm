@@ -6,7 +6,7 @@ export default function Index() {
     }, [])
     return (
         <div>
-            <Link href="/editor">a</Link>
+            <Link href="/article-editor">a</Link>
         </div>
     )
 }
