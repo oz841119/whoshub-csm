@@ -1,25 +1,30 @@
 import { useEditor, EditorContent } from '@tiptap/react'
+// import BulletList from '@tiptap/extension-bullet-list'
 import StarterKit from '@tiptap/starter-kit'
 import style from './styles/Editor.module.css'
 import 'remixicon/fonts/remixicon.css'
 
 export default function Editor() {
+    
     const editor = useEditor({
         extensions: [
+            // CustomBulletList(),
             StarterKit.configure({
                 code: {
                     HTMLAttributes: {
                         class: 'editor-code',
                     },
-                }
+                },
             })
         ],
-        content: '<p>Hello World! 🌎️</p>',
+        content: '<p>Hello World! 🌎️</p>'
     })!
     const tools = {
         setBlod: () => editor.commands.toggleBold(),
         setCode: () => editor.commands.toggleCode(),
         setHeading: (level: any) => editor.commands.toggleHeading({level}),
+        setHardBreak: () => editor.commands.setHardBreak(),
+        getHTML: () => console.log(editor.getHTML())
     }
     return (
         <>
@@ -29,7 +34,7 @@ export default function Editor() {
                 <div className={style.toolItem} onClick={() => tools.setHeading(2)}><i className="ri-h-2"></i></div>
                 <div className={style.toolItem} onClick={() => tools.setHeading(3)}><i className="ri-h-3"></i></div>
                 <div className={style.toolItem} onClick={() => tools.setHeading(4)}><i className="ri-h-4"></i></div>
-                <div className={style.toolItem} onClick={tools.setCode}><i className="ri-code-s-slash-line"></i></div>
+                <div className={style.toolItem} onClick={tools.setHardBreak}><i className="ri-code-s-slash-line"></i></div>
                 <div className={style.toolItem} onClick={tools.setCode}><i className="ri-code-box-line"></i></div>
                 <div className={style.toolItem} onClick={tools.setCode}><i className="ri-underline"></i></div>
                 <div className={style.toolItem} onClick={tools.setCode}><i className="ri-link-m"></i></div>
@@ -38,6 +43,7 @@ export default function Editor() {
                 <div className={style.toolItem} onClick={tools.setCode}><i className="ri-film-line"></i></div>
                 <div className={style.toolItem} onClick={tools.setCode}><i className="ri-separator"></i></div>
                 <div className={style.toolItem} onClick={tools.setCode}><i className="ri-send-plane-2-line"></i></div>
+                <div className={style.toolItem} onClick={tools.getHTML}><i className="ri-expand-right-line"></i></div>
             </div>
             <div style={{padding: '12px'}}>
                 <EditorContent editor={editor}/>
