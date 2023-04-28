@@ -1,7 +1,7 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
-import style from './styles/Editor.module.css'
+import style from './Editor.module.css'
 import 'remixicon/fonts/remixicon.css'
 
 export default forwardRef(Editor)
@@ -9,7 +9,6 @@ export default forwardRef(Editor)
 function Editor(props: any, ref: any) {
     const editor = useEditor({
         extensions: [
-            // CustomBulletList(),
             StarterKit.configure({
                 code: {
                     HTMLAttributes: {
@@ -18,28 +17,18 @@ function Editor(props: any, ref: any) {
                 },
             })
         ],
-        content: '<p>Hello World! 🌎️</p>'
+        content: props.initContent
     })!
     const tools = {
         setBlod: () => editor.commands.toggleBold(),
         setCode: () => editor.commands.toggleCode(),
         setHeading: (level: any) => editor.commands.toggleHeading({level}),
         setHardBreak: () => editor.commands.setHardBreak(),
-        getHTML: () => console.log(editor)
+        getHTML: () => editor.getHTML(),
     } 
     useImperativeHandle(ref, () => {
-        if(!editor) {
-            console.log('editor無值 子組件觸發useImperativeHandle');
-            console.log(editor);
-            return {}
-        }
-        else {
-            console.log('editor有值 子組件觸發useImperativeHandle');
-            console.log(editor);
-            return {
-                getHTML: editor.getHTML
-            }
-        }
+        if(!editor) return {}
+        else return ({getHTML: tools.getHTML})
     })
     return (
         <>
