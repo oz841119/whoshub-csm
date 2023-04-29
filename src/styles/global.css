@@ -3,6 +3,11 @@
     padding: 0;
 }
 
+a {
+    color: unset;
+    text-decoration: unset;
+}
+
 input {
     outline-style: none;
     background-color: unset;

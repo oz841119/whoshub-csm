@@ -1,0 +1,40 @@
+.side {
+    width: 200px;
+    background-color: #1f2d55;
+    height: 100vh;
+    color: #fff;
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.title {
+    display: block;
+    text-align: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #fff;
+}
+
+.user {
+    text-align: center;
+    padding: 8px 0;
+    font-size: 12px;
+    font-weight: 400;
+    border-bottom: 1px solid #ffffff4c;
+}
+
+
+.items {
+    padding: 24px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+}
+
+.item {
+    cursor: pointer;
+}
+
+.item:hover {
+    transform: scale(1.1);
+}
