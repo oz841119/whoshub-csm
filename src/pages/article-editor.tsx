@@ -9,7 +9,11 @@ type EditorRefCurrent = {
     getHTML: () => string;
 }
 type ArticleFormRef = {
-    extractArticleInfo: () => object;
+    extractArticleInfo: () => ArticleInfo
+}
+type ArticleInfo = {
+    title: string
+    tags: string[]
 }
 
 export default function articleEditor() {
@@ -20,14 +24,10 @@ export default function articleEditor() {
         setArticleHTML(``)
     }, [])
 
-    function extractArticleInfo(): any {
-        if(!articleFormRef.current) return null
-        const articleInfo = articleFormRef.current.extractArticleInfo()
-        return articleInfo
-    }
     function submit() {
         if(!editorRef.current) return
-        const articleInfo = extractArticleInfo()
+        if(!articleFormRef.current) return null
+        const articleInfo = articleFormRef.current.extractArticleInfo()
         const params = {
             title: articleInfo.title,
             content: editorRef.current.getHTML(),
@@ -35,7 +35,6 @@ export default function articleEditor() {
             edit_date: new Date().valueOf(),
             views: '這篇文章是新發佈' ? 0 : '當前瀏覽數'
         }
-        console.log(params);
     }
     if(articleHTML === null) return null
     return (

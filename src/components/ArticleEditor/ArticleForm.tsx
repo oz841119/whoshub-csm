@@ -7,33 +7,31 @@ function ArticleForm(props: any, ref: any) {
     const [tags, setTags] = useState<string[]>([])
     useImperativeHandle(ref, () => {
         return {
-            extractArticleInfo: extractArticleInfo
+            extractArticleInfo: extractArticleInfo,
         }
     })
     function extractArticleInfo(): ExtractArticleInfo {
         const title = (document.getElementById('articleFormTitle') as HTMLInputElement).value
-        return {title}
+        return {title, tags}
     }
-    function onTagsInputChange(tag: string) {
-        if(tags.includes(tag)) return
-        setTags(prevTags => [...prevTags, tag])
+    function onTagsInputChange(tags: string[]) {
+        setTags(tags)
         return
-    }
-    function handleDeleteTag(tag: string) {
-        setTags(prevTags => prevTags.filter(prevTag => prevTag !== tag))
     }
     return (
         <div>
             <div>
-                <div style={{marginBottom: '6px'}}><AutoTagsInput inputChange={onTagsInputChange}></AutoTagsInput></div>
-                {tags.map(tag => <Chip sx={{marginRight: '4px'}} label={tag} onDelete={() => handleDeleteTag(tag)} key={tag}/>)}
+                <div style={{marginBottom: '6px'}}>
+                    <AutoTagsInput inputChange={onTagsInputChange}></AutoTagsInput>
+                </div>
             </div>
             <TextField variant="standard" id="articleFormTitle" label="標題" size="small" sx={{width: '400px'}}/>
         </div>
     )
 }
 
-function AutoTagsInput({inputChange}: {inputChange: (tag: string) => void}) {
+function AutoTagsInput({inputChange}: {inputChange: (tag: string[]) => void}) {
+    const [tags, setTags] = useState<string[]>([])
     const filter = createFilterOptions();
     const [allTags, setAlltags] = useState<any>([])
     useEffect(() => {
@@ -43,43 +41,32 @@ function AutoTagsInput({inputChange}: {inputChange: (tag: string) => void}) {
             setAlltags(result)
         })
     }, [])
-    function onChange(event: any, newValue: any) {
-        if(!newValue) return
-        const isExisting = typeof newValue === 'string'
-        if(isExisting) inputChange(newValue)
-        else inputChange(newValue.inputValue)
-        event.target.value = ''
-    }
-    function filterOptions(options: AutocompleteOptions[], params: any) {        
-        const filtered: AutocompleteOptions[] = filter(options, params) as AutocompleteOptions[]
+    function filterOptions(options: string[], params: any) {        
+        const filtered: string[] = filter(options, params) as string[]
         const {inputValue} = params
-        if(inputValue !== '') filtered.push({title: `添加: ${inputValue}`, inputValue})
+        if(inputValue !== '') filtered.push(inputValue)
         return filtered
     }
-
-    const [value, setValue] = useState(null)
     return (
         <Autocomplete
             loading={true}
             loadingText="Loading..."
             size="small"
-            onChange={onChange}
-            value={value}
-            options={allTags ? allTags : []}
-            filterOptions={filterOptions}
-            getOptionLabel={(option: AutocompleteOptions) => {
-                if(typeof option === 'string') {
-                    return option
-                } else {
-                    return option.title
-                }
+            value={tags}
+            onChange={(event, options) => {
+                setTags(options)
+                inputChange(options)
             }}
+            options={allTags ? allTags : []}
+            freeSolo
+            filterOptions={filterOptions}
+            multiple
             renderInput={(params) => (
                 <TextField 
                     {...params} 
                     label="標籤"
                     variant="standard"
-                    sx={{width: '100px'}}
+                    sx={{width: '400px'}}
                 />
             )}
         />
@@ -89,9 +76,5 @@ function AutoTagsInput({inputChange}: {inputChange: (tag: string) => void}) {
 
 interface ExtractArticleInfo {
     title: string
-}
-
-type AutocompleteOptions = string | {
-    title: string
-    inputValue: string
+    tags: string[]
 }
