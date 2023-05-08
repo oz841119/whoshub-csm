@@ -28,7 +28,8 @@ function ArticleForm(props: any, ref: any) {
                 <div style={{marginBottom: '6px'}}><AutoTagsInput inputChange={onTagsInputChange}></AutoTagsInput></div>
                 {tags.map(tag => <Chip sx={{marginRight: '4px'}} label={tag} onDelete={() => handleDeleteTag(tag)} key={tag}/>)}
             </div>
-            <TextField variant="standard" id="articleFormTitle" label="標題" size="small" sx={{width: '400px'}}/>
+            <TextField variant="standard" id="articleFormTitle" label="標題" size="small" sx={{width: '400px'}}/><br/><br/>
+            <TextField variant="standard" id="articleFormSummary" label="簡介" size="small" sx={{width: '400px'}}/>
         </div>
     )
 }
