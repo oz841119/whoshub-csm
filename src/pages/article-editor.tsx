@@ -33,7 +33,7 @@ export default function articleEditor() {
             title: articleInfo.title,
             summary: articleInfo.summary,
             content: editorRef.current.getHTML(),
-            release_date: '這篇文章有發佈時間' ? '初始發佈時間' : new Date().valueOf(),
+            release_date: new Date().valueOf(),
             edit_date: new Date().valueOf(),
             views: '這篇文章是新發佈' ? 0 : '當前瀏覽數',
             id: (Math.floor(Math.random() * 9000) + 1000).toString()
@@ -44,9 +44,10 @@ export default function articleEditor() {
             body: JSON.stringify(params)
         }
         fetch('http://localhost:3333/article', fetchConfig)
-            .then(res => {
-                console.log(res);
-            })
+            .then(res => res.json())
+            .then(response => {
+                console.log(response);
+            })  
             .catch(err => {
                 console.log(err);
             })
