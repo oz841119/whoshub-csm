@@ -12,7 +12,8 @@ function ArticleForm(props: any, ref: any) {
     })
     function extractArticleInfo(): ExtractArticleInfo {
         const title = (document.getElementById('articleFormTitle') as HTMLInputElement).value
-        return {title, tags}
+        const summary = (document.getElementById('articleFormSummary') as HTMLInputElement).value
+        return {title, tags, summary}
     }
     function onTagsInputChange(tags: string[]) {
         setTags(tags)
@@ -78,4 +79,5 @@ function AutoTagsInput({inputChange}: {inputChange: (tag: string[]) => void}) {
 interface ExtractArticleInfo {
     title: string
     tags: string[]
+    summary: string
 }

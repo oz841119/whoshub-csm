@@ -15,6 +15,11 @@ function Editor(props: any, ref: any) {
                         class: 'editor-code',
                     },
                 },
+                bulletList: {
+                    HTMLAttributes: {
+                        class: 'editor-bulletList',
+                    },
+                }
             })
         ],
         content: props.initContent
@@ -25,6 +30,7 @@ function Editor(props: any, ref: any) {
         setHeading: (level: any) => editor.commands.toggleHeading({level}),
         setHardBreak: () => editor.commands.setHardBreak(),
         getHTML: () => editor.getHTML(),
+        setBulletList: () => editor.commands.toggleBulletList()
     } 
     useImperativeHandle(ref, () => {
         if(!editor) return {}
@@ -42,7 +48,7 @@ function Editor(props: any, ref: any) {
                 <div className={style.toolItem} onClick={tools.setCode}><i className="ri-code-box-line"></i></div>
                 <div className={style.toolItem} onClick={tools.setCode}><i className="ri-underline"></i></div>
                 <div className={style.toolItem} onClick={tools.setCode}><i className="ri-link-m"></i></div>
-                <div className={style.toolItem} onClick={tools.setCode}><i className="ri-list-unordered"></i></div>
+                <div className={style.toolItem} onClick={tools.setBulletList}><i className="ri-list-unordered"></i></div>
                 <div className={style.toolItem} onClick={tools.setCode}><i className="ri-image-line"></i></div>
                 <div className={style.toolItem} onClick={tools.setCode}><i className="ri-film-line"></i></div>
                 <div className={style.toolItem} onClick={tools.setCode}><i className="ri-separator"></i></div>

@@ -8,6 +8,7 @@ import { Button } from '@mui/material'
 type EditorRefCurrent = {
     getHTML: () => string;
 }
+
 type ArticleFormRef = {
     extractArticleInfo: () => ArticleInfo
 }
@@ -17,21 +18,28 @@ type ArticleInfo = {
     tags: string[]
 }
 
-export default function articleEditor() {
+export default function addArticle() {
     const editorRef = useRef<EditorRefCurrent | null>(null)
     const articleFormRef = useRef<ArticleFormRef | null>(null)
     const [articleHTML, setArticleHTML] = useState<string | null>(null)
     useEffect(() => {
-        setArticleHTML(``)
+        const editorContentBackup = localStorage.getItem('editorContentBackup')
+        editorContentBackup && setArticleHTML(editorContentBackup)
+        const bachupEditorTimer = setTimeout(backupEditor, 3000);
+        return () => {
+            clearInterval(bachupEditorTimer)
+        }
     }, [])
 
     function submit() {
         if(!editorRef.current) return
         if(!articleFormRef.current) return null
         const articleInfo = articleFormRef.current.extractArticleInfo()
+        
         const params = {
             title: articleInfo.title,
             summary: articleInfo.summary,
+            tags: articleInfo.tags,
             content: editorRef.current.getHTML(),
             release_date: new Date().valueOf(),
             edit_date: new Date().valueOf(),
@@ -51,6 +59,12 @@ export default function articleEditor() {
             .catch(err => {
                 console.log(err);
             })
+    }
+    function backupEditor() {
+        if(!editorRef.current) return
+        if(!articleFormRef.current) return null
+        const content = editorRef.current.getHTML()
+        localStorage.setItem('editorContentBackup', content)
     }
     if(articleHTML === null) return null
     return (
