@@ -5,8 +5,8 @@ import style from './Editor.module.css'
 import 'remixicon/fonts/remixicon.css'
 import Underline from '@tiptap/extension-underline';
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
-import { lowlight } from 'lowlight/lib/common';
 
+import { lowlight } from 'lowlight';
 export default forwardRef(Editor)
 
 function Editor(props: any, ref: any) {
@@ -14,14 +14,13 @@ function Editor(props: any, ref: any) {
         extensions: [
             Underline.configure(),
             CodeBlockLowlight.configure({
-                lowlight, defaultLanguage: 'plaintext', languageClassPrefix: 'language-javascript',
+                lowlight,
+                HTMLAttributes: {
+                    class: "editor-code"
+                }
             }),
             StarterKit.configure({
-                code: {
-                    HTMLAttributes: {
-                        class: 'editor-code',
-                    },
-                },
+                codeBlock: false,
                 bulletList: {
                     HTMLAttributes: {
                         class: 'editor-bulletList',
