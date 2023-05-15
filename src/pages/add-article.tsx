@@ -24,7 +24,7 @@ export default function addArticle() {
     const [articleHTML, setArticleHTML] = useState<string | null>(null)
     useEffect(() => {
         const editorContentBackup = localStorage.getItem('editorContentBackup')
-        editorContentBackup && setArticleHTML(editorContentBackup)
+        setArticleHTML(editorContentBackup ? editorContentBackup : '')
         const bachupEditorTimer = setTimeout(backupEditor, 3000);
         return () => {
             clearInterval(bachupEditorTimer)
@@ -66,7 +66,6 @@ export default function addArticle() {
         const content = editorRef.current.getHTML()
         localStorage.setItem('editorContentBackup', content)
     }
-    if(articleHTML === null) return null
     return (
         <div>
             <div className={style.btnWrap}>
@@ -75,7 +74,7 @@ export default function addArticle() {
             </div>
             <ArticleForm ref={articleFormRef}/>
             <div className={style.editor}>
-                <Editor ref={editorRef} initContent={articleHTML}/>
+                {articleHTML !== null && <Editor ref={editorRef} initContent={articleHTML}/>}
             </div>
         </div>
     )

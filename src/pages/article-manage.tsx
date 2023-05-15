@@ -8,19 +8,41 @@ import Paper from '@mui/material/Paper';
 import { useEffect, useState } from 'react';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import style from './styles/article-manage.module.css'
+import { Alert, Snackbar } from '@mui/material';
+import FullLoading from '@/components/utils/FullLoading';
 
 export default function articleManage() {
     const [articles, setArticles] = useState([])
-    useEffect(() => {
+    const [isAlertMessage, setIsAlertMessage] = useState(false)
+    const [alertMessageOptions, setAlertMessageOptions] = useState<AlertMessageProp["options"]>({type: 'success', message: '取得資料成功'})
+    const [isFullLoading, setIsFullLoading] = useState(false)
+    useEffect(() => { // 取得文章列表
         fetch('http://localhost:3333/article_list')
             .then(res => res.json())
             .then(response => {
+                setIsAlertMessage(true)
                 setArticles(response)
+                delayToCloseAlertMessage()
+                setIsFullLoading(false)
+            })
+            .catch(() => {
+                setAlertMessageOptions({type: 'error', message: '取得資料失敗'})
+                setIsAlertMessage(true)
+                delayToCloseAlertMessage()
+                setIsFullLoading(false)
             })
     }, [])
+
+    function delayToCloseAlertMessage(delay: number | undefined = 2500) {
+        setTimeout(() => {
+            setIsAlertMessage(false)
+        }, delay);
+    }
     return (
         <div>
             <ArticleTable articles={articles}/>
+            <AlertMessage isOpen={isAlertMessage} options={alertMessageOptions}/>
+            <FullLoading isOpen={isFullLoading}/>
         </div>
     )
 }
@@ -72,6 +94,16 @@ function ArticleTable({articles}: ArticleTableProps) {
     )
 }
 
+function AlertMessage({isOpen, options}: AlertMessageProp) {
+    return (
+        <Snackbar open={isOpen} autoHideDuration={6000}>
+            <Alert severity={options.type} sx={{ width: '100%' }}>
+                {options.message}
+            </Alert>
+        </Snackbar>
+    )
+}
+
 
 type Articles = {
     title: string,
@@ -84,4 +116,12 @@ type Articles = {
 
 type ArticleTableProps = {
     articles: Articles[]
+}
+
+type AlertMessageProp = {
+    isOpen: boolean
+    options: {
+        message: string,
+        type: 'success' | 'error'
+    }
 }
