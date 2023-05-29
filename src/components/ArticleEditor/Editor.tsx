@@ -5,13 +5,16 @@ import style from './Editor.module.css'
 import 'remixicon/fonts/remixicon.css'
 import Underline from '@tiptap/extension-underline';
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
-
+import Link from '@tiptap/extension-link';
 import { lowlight } from 'lowlight';
 export default forwardRef(Editor)
 
 function Editor(props: any, ref: any) {
     const editor = useEditor({
         extensions: [
+            Link.configure({
+                openOnClick: true,
+            }),              
             Underline.configure(),
             CodeBlockLowlight.configure({
                 lowlight,
@@ -36,7 +39,12 @@ function Editor(props: any, ref: any) {
         setHeading: (level: any) => editor.commands.toggleHeading({level}),
         getHTML: () => editor.getHTML(),
         setBulletList: () => editor.commands.toggleBulletList(),
-        toogleUnderLine: () => editor.commands.toggleUnderline()
+        toogleUnderLine: () => editor.commands.toggleUnderline(),
+        setLink: () => {
+            const previousUrl = editor.getAttributes('link').href
+            const href: string = window.prompt('URL', previousUrl) as string
+            editor.commands.setLink({ href, target: '_blank' })
+        }
     } 
     useImperativeHandle(ref, () => {
         if(!editor) return {}
@@ -52,7 +60,7 @@ function Editor(props: any, ref: any) {
                 <div className={style.toolItem} onClick={() => tools.setHeading(4)}><i className="ri-h-4"></i></div>
                 <div className={style.toolItem} onClick={tools.setCode}><i className="ri-code-box-line"></i></div>
                 <div className={style.toolItem} onClick={tools.toogleUnderLine}><i className="ri-underline"></i></div>
-                <div className={style.toolItem} onClick={tools.setCode}><i className="ri-link-m"></i></div>
+                <div className={style.toolItem} onClick={() => tools.setLink()}><i className="ri-link-m"></i></div>
                 <div className={style.toolItem} onClick={tools.setBulletList}><i className="ri-list-unordered"></i></div>
                 <div className={style.toolItem} onClick={tools.setCode}><i className="ri-image-line"></i></div>
                 <div className={style.toolItem} onClick={tools.setCode}><i className="ri-film-line"></i></div>
