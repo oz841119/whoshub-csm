@@ -4,6 +4,7 @@ import style from './styles/articleEditor.module.css'
 import Editor from '@/components/ArticleEditor/Editor'
 import ArticleForm from '@/components/ArticleEditor/ArticleForm'
 import { Button } from '@mui/material'
+import { useRouter } from 'next/router'
 
 type EditorRefCurrent = {
     getHTML: () => string;
@@ -19,17 +20,29 @@ type ArticleInfo = {
 }
 
 export default function addArticle() {
+    const router = useRouter()
     const editorRef = useRef<EditorRefCurrent | null>(null)
     const articleFormRef = useRef<ArticleFormRef | null>(null)
     const [articleHTML, setArticleHTML] = useState<string | null>(null)
     useEffect(() => {
-        const editorContentBackup = localStorage.getItem('editorContentBackup')
-        setArticleHTML(editorContentBackup ? editorContentBackup : '')
-        const bachupEditorTimer = setTimeout(backupEditor, 3000);
-        return () => {
-            clearInterval(bachupEditorTimer)
+        if(!router.query.edit) return
+        const fetchConfig = {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
         }
-    }, [])
+        
+        fetch('http://localhost:3333/article/' + router.query?.edit)
+            .then(res => res.json())
+            .then(res => {
+                setArticleHTML(res.content)
+            })
+        // const editorContentBackup = localStorage.getItem('editorContentBackup')
+        // setArticleHTML(editorContentBackup ? editorContentBackup : '')
+        // const bachupEditorTimer = setInterval(backupEditor, 3000);
+        return () => {
+            // clearInterval(bachupEditorTimer)
+        }
+    }, [router.query])
 
     function submit() {
         if(!editorRef.current) return

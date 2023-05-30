@@ -7,15 +7,17 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useEffect, useState } from 'react';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import EditIcon from '@mui/icons-material/Edit';
 import style from './styles/article-manage.module.css'
 import { Alert, Snackbar } from '@mui/material';
 import FullLoading from '@/components/utils/FullLoading';
+import Link from 'next/link';
 
 export default function articleManage() {
     const [articles, setArticles] = useState([])
     const [isAlertMessage, setIsAlertMessage] = useState(false)
     const [alertMessageOptions, setAlertMessageOptions] = useState<AlertMessageProp["options"]>({type: 'success', message: '取得資料成功'})
-    const [isFullLoading, setIsFullLoading] = useState(false)
+    const [isFullLoading, setIsFullLoading] = useState(true)
     useEffect(() => { // 取得文章列表
         fetch('http://localhost:3333/article_list')
             .then(res => res.json())
@@ -49,7 +51,9 @@ export default function articleManage() {
 
 
 function ArticleTable({articles}: ArticleTableProps) {
-    const deleteArticle = (articleId: string) => {
+    const deleteArticle = async (articleId: string) => {
+        const check = await window.confirm(`確認刪除`)
+        if(!check) return
         const config = {
             method: "DELETE",
             headers: {"Content-Type": "application/json"},
@@ -84,6 +88,7 @@ function ArticleTable({articles}: ArticleTableProps) {
                             <TableCell>{article.release_date}</TableCell>
                             <TableCell>{article.edit_date}</TableCell>
                             <TableCell>
+                                <Link href={{pathname: '/add-article', query: {edit: article.id}}}><EditIcon className={style.icon} onClick={() => {}}/></Link>
                                 <DeleteForeverIcon className={style.icon} onClick={() => deleteArticle(article.id)}/>
                             </TableCell>
                         </TableRow>

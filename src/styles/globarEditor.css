@@ -17,6 +17,9 @@
     outline: none;
 }
 
+.ProseMirror p {
+  margin: 15px 0;
+}
 
 .hljs-comment,
     .hljs-quote {
